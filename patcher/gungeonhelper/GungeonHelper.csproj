@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- unity 2017's mono runs the net35 profile (mscorlib 2.0.0.0). anything built against
+         netstandard or a newer framework binds to a corelib the game cannot load -->
+    <TargetFramework>net35</TargetFramework>
+    <AssemblyName>GungeonHelper</AssemblyName>
+    <RootNamespace>Gungeon43</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+    <Nullable>disable</Nullable>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <!-- no pdb path or machine paths inside the dll that gets embedded and published -->
+    <DebugType>none</DebugType>
+    <Deterministic>true</Deterministic>
+    <PathMap>$(MSBuildProjectDirectory)=/gungeonhelper</PathMap>
+    <!-- the unity assemblies of a local mac steam install; override with -p:EtgManaged=... -->
+    <EtgManaged Condition="'$(EtgManaged)' == ''">$(HOME)/Library/Application Support/Steam/steamapps/common/Enter the Gungeon/EtG_OSX.app/Contents/Resources/Data/Managed</EtgManaged>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- net35 reference assemblies, so the mac sdk can build this target -->
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(EtgManaged)/UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>
